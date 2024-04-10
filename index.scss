@@ -42,3 +42,13 @@ section {
 .waypoint__white {
   background-color: white;
 }
+
+.js-header.c-white {
+  .brand svg path {
+    fill: #fff !important;
+  }
+
+  .nav-menu a {
+    color: #fff !important;
+  }
+}

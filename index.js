@@ -68,3 +68,20 @@ window.addEventListener(
     })
   }, 100)
 )
+
+// ----------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector(".js-select-vehicle-form")
+  var currentUrl = window.location.href
+  var homeUrl = "https://dtracing.com/"
+
+  if (currentUrl !== homeUrl && form) {
+    setTimeout(() => {
+      console.log("This is not the home page! and the form exists")
+      form.classList.add("is-hidden-on-small-screens")
+      form.classList.add("test")
+    }, 1000)
+  }
+})
+
+// -----------------------------------------------------------------

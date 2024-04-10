@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://static-cf.cleverbridge.com/mycontent/1/cleverApi.js"></script>
+  </head>
+  <body>
+    {#
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    #}
+    <script>
+      // ---- Clever India -------- //
+      function indiaGetPrice() {
+        $.cleverApi
+          .get({
+            currency: "USD",
+            client_id: 1031,
+            endpoint: "https://pricingapi.cleverbridge.com/prices",
+          })
+          .then(function (response) {
+            var result = response
+            console.log("india: ", result)
+          })
+      }
+
+      // ---- Clever USA -------- //
+      function usaGetPrice() {
+        console.log("usaGetPrice")
+        $.cleverApi
+          .get({
+            currency: "USD",
+            client_id: 1031,
+            endpoint: "https://pricingapi.cleverbridge.com/prices",
+          })
+          .then(function (response) {
+            var result = response
+            console.log("USA: ", result)
+          })
+      }
+
+      // ---- Clever UK -------- //
+      function ukGetPrice() {
+        console.log("ukGetPrice")
+        $.cleverApi
+          .get({
+            currency: "GBP",
+            client_id: 1031,
+            endpoint: "https://pricingapi.cleverbridge.com/prices",
+          })
+          .then(function (response) {
+            var result = response
+            console.log("UK: ", result)
+          })
+
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            "Accept-Language": "fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5",
+          },
+        }
+
+        fetch(
+          "https://pricingapi.cleverbridge.com/prices?client_id=1258&product_id=249128&currency=GBP",
+          options
+        )
+          .then((response) => response.json())
+          .then((response) => console.log(response))
+          .catch((err) => console.error(err))
+      }
+
+      //---------------------------------------------
+      async function getCountry() {
+        const cachedCountry = localStorage.getItem("new-country")
+        if (cachedCountry) {
+          return cachedCountry
+        } else {
+          try {
+            const response = await fetch("https://freeipapi.com/api/json/")
+
+            if (!response.ok) {
+              throw new Error("Unable to receive country data")
+            }
+
+            const data = await response.json()
+            const country = data.countryName
+            console.log(country)
+            localStorage.setItem("new-country", country)
+            return country
+          } catch (error) {
+            console.error(error)
+            return "Not known"
+          }
+        }
+      }
+
+      async function logCountry() {
+        console.log("logCountry")
+        const country = await getCountry()
+
+        if (
+          country === "UK" ||
+          country === "United Kingdom" ||
+          country === "Ireland" ||
+          country === "United Kingdom of Great Britain and Northern Ireland"
+        ) {
+          ukGetPrice()
+        } else if (
+          country === "USA" ||
+          country === "United States" ||
+          country === "United States of America"
+        ) {
+          usaGetPrice()
+        } else if (country === "India" || country === "IN") {
+          indiaGetPrice()
+        } else {
+          usaGetPrice()
+          return
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        logCountry()
+      })
+    </script>
+  </body>
+</html>
